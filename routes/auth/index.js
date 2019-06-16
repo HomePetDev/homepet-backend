@@ -1,22 +1,22 @@
 const router = require('express').Router();
 
-const {findByUsername, findByEmail , insert , findByUsernameOrEmail} = require('../../queries/usuario');
+const { insert, update,  findByCI , getAll} = require('../../queries/empleados');
 const { createJWT, createHash, verifyHash} = require('./utils');
 
 router.post('/login' , async (req, res) => {
-    const {username , email, password } = req.body;
+    const {CI , password } = req.body;
     try {
-      let usuario = await findByUsernameOrEmail(email, username);
-      if(usuario){ 
-        const match = await verifyHash (password , usuario.password);
+      let empleado = await findByCI(CI);
+      if(empleado){ 
+        const match = await verifyHash (password , empleado.password);
         if (!match){
           res.status(404).json({msg: 'Contraseña invalida'});
         }else{          
-          const token = await createJWT({id:usuario.id});
+          const token = await createJWT({id:empleado.id});
           res.status(200).json({token});
         }
       }else{
-        res.status(404).json({msg:'Usuario no existe o no fue encontrado'})
+        res.status(404).json({msg:'empleado no existe o no fue encontrado'})
       }
     } catch (error) {      
       res.status(400).json(error);
@@ -25,13 +25,20 @@ router.post('/login' , async (req, res) => {
 );
 
 router.post('/signin', async (req, res) => {
-  const {username , email, password } = req.body;
-  const nuevoUsuario = {
-    username, email, password: await createHash(password), role_id:1
+  const {CI , nombre , direccion , telefono, sueldo, ocupacion, password } = req.body;
+  const nuevoEmpleado = {
+    CI, nombre,  direccion , telefono, sueldo, ocupacion, password: await createHash(password),
   }
+
+  // Validacion para que el primer usuario en registrarse tenga rol 2 de gerente
+  const empleados = await getAll();
+  if (empleados.length <= 0){
+    nuevoEmpleado.rol = 2;
+  }
+
   try {
-    usuario = await insert(nuevoUsuario);
-    res.status(201).json(usuario);
+    empleado = await insert(nuevoEmpleado);
+    res.status(201).json(empleado);
   } catch (error) {    
     res.status(400).json({msg: error.detail});
   }
