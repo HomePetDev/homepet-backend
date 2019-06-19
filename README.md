@@ -11,11 +11,11 @@
 Modificar el archivo en `./db/index.js` de acuerdo a su configuracion de conexion
 ```sh
   const pool = new Pool({
-  user: 'usuario',
-  host: 'localhost',
-  database: 'nombre_base_datos',
-  password: 'contraseña',
-  port: 5432,
+    user: 'usuario',
+    host: 'localhost',
+    database: 'nombre_base_datos',
+    password: 'contraseña',
+    port: 5432,
 })
 
 ```
