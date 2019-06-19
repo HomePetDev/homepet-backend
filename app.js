@@ -5,29 +5,33 @@ const cors = require('cors');
 require('dotenv/config');
 
 // Importando rutas
-const auth = require('./routes/auth'); 
-const users = require('./routes/api');
-// Importando middlewares
+const auth = require('./routes/api/auth'); 
+const { personas } = require('./routes/api');
+
+// Importando funciones middlewares
 const { notFound , errorHandler } = require('./middlewares');
 
-const app = express();
+const app = express(); // Inicializando express
 
-
+// middlewares de desarrollo
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
+//  Rutas de la API comienzan aqui
 app.get('/' , (req, res) =>{
   res.json({
     msg: 'Hello World Home Pet'
   })
 })
 
-app.use('/api', users);
+app.use('/api/personas', personas);
 app.use('/api/auth', auth);
 
+// manejando errores
 app.use(notFound);
 app.use(errorHandler)
 

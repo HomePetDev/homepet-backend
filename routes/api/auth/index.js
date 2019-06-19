@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { insert, update,  findByCI , getAll} = require('../../queries/empleados');
+const { insert, update,  findByCI , getAll} = require('../../../queries/empleados');
 const { createJWT, createHash, verifyHash} = require('./utils');
 
 router.post('/login' , async (req, res) => {
@@ -29,13 +29,7 @@ router.post('/signin', async (req, res) => {
   const nuevoEmpleado = {
     CI, nombre,  direccion , telefono, sueldo, ocupacion, password: await createHash(password),
   }
-
-  // Validacion para que el primer usuario en registrarse tenga rol 2 de gerente
-  const empleados = await getAll();
-  if (empleados.length <= 0){
-    nuevoEmpleado.rol = 2;
-  }
-
+  
   try {
     empleado = await insert(nuevoEmpleado);
     res.status(201).json(empleado);
