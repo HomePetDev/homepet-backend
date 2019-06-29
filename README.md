@@ -7,8 +7,8 @@
   npm run dev 
   # El servidor Corre en http://localhost:3000
 ```
-### Variables del entorno
-Para el funcionamiento de `dontenv` crear un archivo `.env` con los siguientes claves
+### Variables de entorno
+Para el funcionamiento de `dontenv` y de todas las claves necesarias para el desarrollo/produccion crear un archivo `.env` con los siguientes claves, un ejemplo de las claves utilizadas se encuentra en el archivo `.env.sample`
 ```sh
   JWT_SECRET = tu secreto baby
 ```
