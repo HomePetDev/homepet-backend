@@ -6,7 +6,7 @@ require('dotenv/config');
 
 // Importando rutas
 const auth = require('./routes/api/auth'); 
-const { personas } = require('./routes/api');
+const { usuarios, homepets } = require('./routes/api');
 
 // Importando funciones middlewares
 const { notFound , errorHandler } = require('./middlewares');
@@ -28,7 +28,8 @@ app.get('/' , (req, res) =>{
   })
 })
 
-app.use('/api/personas', personas);
+app.use('/api/usuarios', usuarios);
+app.use('/api/homepets', homepets);
 app.use('/api/auth', auth);
 
 // manejando errores

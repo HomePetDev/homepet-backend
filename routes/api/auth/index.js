@@ -1,39 +1,43 @@
 const router = require('express').Router();
 
-const { insert, update,  findByCI , getAll} = require('../../../queries/empleados');
+const { insert, findByCI } = require('../../../queries/usuarios');
 const { createJWT, createHash, verifyHash} = require('./utils');
 
 router.post('/login' , async (req, res) => {
-    const {CI , password } = req.body;
+    const {cedula_id , pass } = req.body;
     try {
-      let empleado = await findByCI(CI);
-      if(empleado){ 
-        const match = await verifyHash (password , empleado.password);
+      let usuario = await findByCI(cedula_id);  
+      console.log(usuario);
+      
+      if(usuario){ 
+        const match = await verifyHash (pass , usuario.pass);
         if (!match){
           res.status(404).json({msg: 'Contraseña invalida'});
         }else{          
-          const token = await createJWT({id:empleado.id});
+          const token = await createJWT({cedula_id:usuario.cedula_id});          
           res.status(200).json({token});
         }
       }else{
-        res.status(404).json({msg:'empleado no existe o no fue encontrado'})
+        res.status(404).json({msg:'usuario no existe o no fue encontrado'})
       }
     } catch (error) {      
+      console.log(error);
       res.status(400).json(error);
     }
   }
 );
 
 router.post('/signin', async (req, res) => {
-  const {CI , nombre , direccion , telefono, sueldo, ocupacion, password } = req.body;
-  const nuevoEmpleado = {
-    CI, nombre,  direccion , telefono, sueldo, ocupacion, password: await createHash(password),
+  const {cedula_id, pass, nombre, direccion, telefono} = req.body;
+  const nuevoUsuario = {
+    cedula_id, nombre,  direccion , telefono, pass: await createHash(pass), id_acceso:'1'
   }
   
   try {
-    empleado = await insert(nuevoEmpleado);
-    res.status(201).json(empleado);
+    usuario = await insert(nuevoUsuario);
+    res.status(201).json(usuario);
   } catch (error) {    
+    console.log(error);
     res.status(400).json({msg: error.detail});
   }
 });

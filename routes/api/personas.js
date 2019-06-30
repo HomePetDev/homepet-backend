@@ -1,6 +1,6 @@
 const  router = require('express').Router();
 
-const { selectAll, insert, findById , update , deleteById} = require('../../queries/personas');
+const { selectAll, insert, findById , update , deleteById } = require('../../queries/personas');
 
 // @route GET api/pruebas
 // @desc obtiene todos las tuplas en una tabla "personas"

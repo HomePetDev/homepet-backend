@@ -5,7 +5,7 @@ const { Pool } = require('pg')
 const pool = new Pool({
   user: 'FLX',
   host: 'localhost',
-  database: 'prueba',
+  database: 'homepet-db',
   password: 'flx',
   port: 5432,
 })
