@@ -5,8 +5,10 @@ const cors = require('cors');
 require('dotenv/config');
 
 // Importando rutas
-const auth = require('./routes/api/auth'); 
-const { personas } = require('./routes/api');
+const auth = require('./auth'); 
+const api = require ('./routes/api');
+
+
 
 // Importando funciones middlewares
 const { notFound , errorHandler } = require('./middlewares');
@@ -28,7 +30,7 @@ app.get('/' , (req, res) =>{
   })
 })
 
-app.use('/api/personas', personas);
+app.use('/api' , api);
 app.use('/api/auth', auth);
 
 // manejando errores
