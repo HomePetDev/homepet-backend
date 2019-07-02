@@ -62,17 +62,26 @@ router.patch('/:rif' , async(req,res)=>{
     
     !updatedHomepet.error ? res.json(updatedHomepet) : res.status(400).json(updatedHomepet);
   }else{
-    res.status(404).json({msg:"Home Pet no exite"})
+    res.status(404).json({msg:"HomePet no existe"})
   }
 });
 
 router.delete('/:rif' , async(req,res)=>{
 
-  const { cedula } = await hmptQuery.findOwner(req.params.rif, ['cedula']);  
-  const usuario = await query.update(tables.usuarios, {cedula_id:cedula} , {id_acceso:1}, "*");
-  if (!usuario.error){
-    res.json(await query.deleteT(tables.homepets, req.params));
-  }
+  // Actualizando el acceso del gerente asociado al homepet
+  const {cedula} = await query.select(tables.gerentes, ['cedula'], {rif_homepet: req.params.rif});
+
+  if (cedula){
+    if (await query.deleteT(tables.homepets, req.params)){
+
+      await query.update(tables.usuarios, {cedula_id:cedula}, {id_acceso:1}, "*");
+      res.json(1);
+    }else{
+      res.json({msg:"No se pudo eliminar el hompet"})
+    }
+  }else{ res.json({msg:"No existe el homepet"})}
+    
+  // Borro el homepet
 })
 
 

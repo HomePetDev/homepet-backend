@@ -19,7 +19,7 @@ router.get('/:cedula_id', async (req, res)=>{
 
 router.patch('/:cedula_id' , async(req,res)=>{
   const updatedUsuario = await query.update(tables.usuarios, req.params,req.body.payload, returning);
-  !updatedUsuario.error ? res.json(updatedUsuario) : res.status(404).json({msg:"Usuario no existe"});
+  !updatedUsuario.error ? res.json(updatedUsuario) : res.status(400).json(updatedUsuario);
 });
 
 router.delete('/:cedula_id' , async(req,res)=>{
