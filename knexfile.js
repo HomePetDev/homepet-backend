@@ -4,9 +4,9 @@ module.exports = {
     client: 'pg',
     connection: {
       host : 'localhost',
-      user : 'FLX',
-      password : 'flx',
-      database : 'homepet-db'
+      user : 'tu_usuario',
+      password : 'tu_contraseña',
+      database : 'nombre_base_datos'
     }
   },
   production: {
