@@ -1,40 +1,18 @@
-const router = require('express').Router();
-const query = require('../../queries');
-const tables = require('../../queries/tables');
+const router = require ('express').Router();
+const query = require ('../../queries');
+const {clientes } = require ('../../queries/tables');
 
-const returning = "*"
-
-router.post('/:rif' , async (req,res)=>{
-  const { cedula, sueldo } = req.body.payload;
-  const usuario = await query.select(tables.usuarios, "*", {cedula_id:cedula});
-  if (!usuario.error && usuario.id_acceso === 1 ){
-    const newEmpleado = await query.insert(tables.empleados, {cedula, sueldo}, "*");
-    if (newEmpleado.error){
-      res.status(400).json(newEmpleado);
-    }else{
-      const result = await query.insert(tables.e_trabaja_h,{
-        cedula_empleado: cedula,
-        rif_homepet: req.params.rif
-      },"*");
-      if (result.error){
-        await query.deleteT(tables.empleados, {cedula});
-        res.status(400).json({error:"No se pudo añadir el empleado"});
-      }else{
-        await query.update(tables.usuarios, {cedula_id: cedula} , {id_acceso: 3}, "*");
-        res.json({newEmpleado, result});
-      }
-    }
-  }else{
-    res.status(400).json({error:"Empleado no esta registrado como usuario o tiene otro rol asignado"})
-  }
-    
-})
+router.post('/', async (req,res)=>{
+    const cliente = await query.insert(clientes, req.body.payload, "*");
+    cliente.error ? res.status(400).json(cliente) : res.json(cliente);
+});
 
 // Obtiene todos los empleados
 router.get('/', async (req, res)=> {
   const empleados = await query.select(tables.empleados, returning);
   empleados ? res.json(empleados) : res.status(500).json(empleados)
 })
+
 
 // Obtiene un empleado con una sedula dada
 router.get('/:cedula', async (req, res)=>{
@@ -69,9 +47,7 @@ router.delete('/:cedula' , async(req,res)=>{
 });
 
 
-router.get('/e_trabaja_h/all', async (req, res) =>{ 
-  res.json(await query.select(tables.e_trabaja_h, "*"));
- 
-})
+
+
 
 module.exports = router;

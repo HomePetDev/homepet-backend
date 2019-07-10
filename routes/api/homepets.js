@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const query = require ('../../queries');
-const hmptQuery = require('../../queries/homepets')
+const {selectAllEmpleados } = require('../../queries/homepets')
 const tables = require('../../queries/tables');
 
 const returningUsuario = ['cedula_id', 'nombre', 'direccion', 'telefono', 'fecha_reg', 'id_acceso'];
@@ -87,6 +87,14 @@ router.delete('/:rif' , async(req,res)=>{
 
 // Extras 
 
+router.get('/empleados/:rif', async(req, res)=>{
+  const empleados = await selectAllEmpleados(req.params.rif);
+  if (empleados.error){
+    res.status(400).json(empleados)
+  }else{
+    res.json(empleados)
+  }
+});
 
 
 module.exports = router;
