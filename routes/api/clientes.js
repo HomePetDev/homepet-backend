@@ -4,10 +4,6 @@ const { selectAll, findByCI } = require('../../queries/clientes');
 const tables  = require ('../../queries/tables');
 
 router.post('/', async (req,res)=>{
-
-  console.log(req.body.payload);
-  
-
     const cliente = await query.insert(tables.clientes, req.body.payload, "*");
     cliente.error ? res.status(400).json(cliente) : res.json(cliente);
 });

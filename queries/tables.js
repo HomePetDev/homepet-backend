@@ -9,10 +9,14 @@ const animal = 'animal';
 const clientes = 'clientes';
 const servicios = 'servicios';
 const actividades = 'actividades';
+const razas = 'raza';
+const mascotas = 'mascota';
+const veterinarios = 'veterinario';
+const enfermedades_mascota = 'enfermedades_mascota'
 
 
  module.exports = {
    schema, homepets, usuarios, gerentes,empleados, e_trabaja_h, animal, clientes, servicios,
-   actividades
+   actividades, razas, mascotas, veterinarios, enfermedades_mascota
   
  }

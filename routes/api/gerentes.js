@@ -33,12 +33,4 @@ router.patch('/:cedula' , async(req,res)=>{
   }
 });
 
-router.delete('/:cedula' , async(req,res)=>{
-  res.json(await query.deleteT(tables.gerentes, req.params));
-});
-
-// rutas extras
-
-
-
 module.exports = router;
