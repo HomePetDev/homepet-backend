@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const query = require('../../queries');
+const { selectAll, findByCI } = require('../../queries/empleados');
 const tables = require('../../queries/tables');
 
 const returning = "*"
@@ -32,15 +33,16 @@ router.post('/:rif' , async (req,res)=>{
 
 // Obtiene todos los empleados
 router.get('/', async (req, res)=> {
-  const empleados = await query.select(tables.empleados, returning);
-  empleados ? res.json(empleados) : res.status(500).json(empleados)
+  const empleados = await selectAll();
+  empleados.error ? res.status(404).json(empleados) : res.json(empleados)
 })
 
-// Obtiene un empleado con una sedula dada
+// Obtiene un empleado con una cedula dada
 router.get('/:cedula', async (req, res)=>{
-  const empleado = await query.select(tables.empleados, returning , req.params);
+  const empleado = await findByCI(req.params.cedula);  
   empleado ? res.json(empleado) : res.status(400).json(empleado);
 })
+
 
 // Actualiza la informacion de un empleado
 router.patch('/:cedula' , async(req,res)=>{
@@ -69,9 +71,8 @@ router.delete('/:cedula' , async(req,res)=>{
 });
 
 
-router.get('/e_trabaja_h/all', async (req, res) =>{ 
-  res.json(await query.select(tables.e_trabaja_h, "*"));
- 
-})
+
+
+
 
 module.exports = router;

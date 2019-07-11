@@ -1,43 +1,47 @@
 const router = require ('express').Router();
 const query = require ('../../queries');
-const {clientes } = require ('../../queries/tables');
+const { selectAll, findByCI } = require('../../queries/clientes');
+const tables  = require ('../../queries/tables');
 
 router.post('/', async (req,res)=>{
-    const cliente = await query.insert(clientes, req.body.payload, "*");
+
+  console.log(req.body.payload);
+  
+
+    const cliente = await query.insert(tables.clientes, req.body.payload, "*");
     cliente.error ? res.status(400).json(cliente) : res.json(cliente);
 });
 
-// Obtiene todos los empleados
+// Obtiene todos los clientes
 router.get('/', async (req, res)=> {
-  const empleados = await query.select(tables.empleados, returning);
-  empleados ? res.json(empleados) : res.status(500).json(empleados)
+  const clientes = await selectAll();
+  clientes.error ? res.status(404).json(clientes) : res.json(clientes);
 })
 
-
-// Obtiene un empleado con una sedula dada
+// Obtiene un cliente con una cedula dada
 router.get('/:cedula', async (req, res)=>{
-  const empleado = await query.select(tables.empleados, returning , req.params);
-  empleado ? res.json(empleado) : res.status(400).json(empleado);
+  const cliente = await findByCI(req.params.cedula);
+  cliente.error ? res.status(404).json(cliente) : res.json(cliente);
 })
 
-// Actualiza la informacion de un empleado
+
+// Actualiza la informacion de un cliente
 router.patch('/:cedula' , async(req,res)=>{
-  const empleado = await query.select(tables.empleados, "*" , req.params);
-  if ( empleado ){
-    const updatedEmpleado = await query.update(tables.empleados, req.params,req.body.payload, returning);
-    !updatedEmpleado.name ? res.json(updatedEmpleado) : res.status(400).json(updatedEmpleado);
+  const cliente = await query.select(tables.clientes, "*" , req.params);
+  if ( cliente ){
+    const updatedCliente = await query.update(tables.clientes, req.params,req.body.payload, "*");
+    !updatedCliente.name ? res.json(updatedCliente) : res.status(400).json(updatedCliente);
   }else{
-    res.status(404).json({msg:"empleado no existe"})
+    res.status(404).json({msg:"cliente no existe"})
   }
 });
 
-// Borra un empleado
+// Borra un cliente
 router.delete('/:cedula' , async(req,res)=>{
 
   const cedula =  req.params.cedula
-    
-  if (await query.deleteT(tables.empleados,req.params)){
-    const userUpdated = query.update(tables.usuarios,{cedula_id:cedula}, {id_acceso:1}, "*");
+  if (await query.deleteT(tables.clientes,req.params)){
+    const userUpdated = query.update(usuarios,{cedula_id:cedula}, {id_acceso:1}, "*");
     if (userUpdated.error){
       res.json(userUpdated);
     }else{
@@ -45,9 +49,6 @@ router.delete('/:cedula' , async(req,res)=>{
     }
   }
 });
-
-
-
 
 
 module.exports = router;

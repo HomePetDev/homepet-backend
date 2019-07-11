@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const query = require('../../queries');
-const { selectAll } = require('../../queries/gerentes');
+const { selectAll, findByCI } = require('../../queries/gerentes');
 const tables = require('../../queries/tables');
 
 const returning = "*"
@@ -19,7 +19,7 @@ router.get('/', async (req, res)=> {
 })
 
 router.get('/:cedula', async (req, res)=>{
-  const gerente = await query.select(tables.gerentes, returning , req.params);
+  const gerente = await findByCI(req.params.cedula);
   !gerente.error ? res.json(gerente) : res.status(400).json(gerente);
 })
 

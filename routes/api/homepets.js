@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const query = require ('../../queries');
+
 const {selectAllEmpleados } = require('../../queries/homepets')
+
 const tables = require('../../queries/tables');
 
 const returningUsuario = ['cedula_id', 'nombre', 'direccion', 'telefono', 'fecha_reg', 'id_acceso'];
@@ -85,8 +87,7 @@ router.delete('/:rif' , async(req,res)=>{
 })
 
 
-// Extras 
-
+// Obtiene todos los empleados de un homepet
 router.get('/empleados/:rif', async(req, res)=>{
   const empleados = await selectAllEmpleados(req.params.rif);
   if (empleados.error){
