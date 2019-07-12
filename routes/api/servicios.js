@@ -18,7 +18,6 @@ router.get('/:rif', async (req, res)=> {
   servicios.error ? res.status(404).json(servicios) : res.json(servicios); 
 })
 
-
 // Actualiza la informacion de un servicio en un homepet
 router.patch('/:rif/:nombre' , async(req,res)=>{
 

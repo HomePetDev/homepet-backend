@@ -26,7 +26,7 @@ router.patch('/:cedula' , async(req,res)=>{
   const cliente = await query.select(tables.clientes, "*" , req.params);
   if ( cliente ){
     const updatedCliente = await query.update(tables.clientes, req.params,req.body.payload, "*");
-    !updatedCliente.name ? res.json(updatedCliente) : res.status(400).json(updatedCliente);
+    !updatedCliente.error ? res.json(updatedCliente) : res.status(400).json(updatedCliente);
   }else{
     res.status(404).json({msg:"cliente no existe"})
   }

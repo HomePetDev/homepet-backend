@@ -15,6 +15,12 @@ router.post ('/:cedula_owner', async (req, res)=>{
   mascota.error ? res.status(400).json(mascota) : res.json(mascota);  
 });
 
+// Añade alguna enfermedad a la mascota
+router.post('/newenf/:id_mascota' , async (req,res)=>{
+  const newEnf = await query.insert(tables.enfermedades_mascota, {...req.params, ...req.body.payload});
+  newEnf.error ? res.status(400).json(newEnf) : res.json(newEnf); 
+});
+
 
 // Obtener todas las mascotas 
 router.get ('/', async (req,res) => {
@@ -32,7 +38,6 @@ router.patch('/:id_mascota' , async(req,res)=>{
     res.status(404).json({msg:"mascota no existe"})
   }
 });
-
 
 // Eliminar una mascota
 router.delete('/:id_mascota' , async (req, res)=>{

@@ -49,7 +49,7 @@ router.patch('/:cedula' , async(req,res)=>{
   const empleado = await query.select(tables.empleados, "*" , req.params);
   if ( empleado ){
     const updatedEmpleado = await query.update(tables.empleados, req.params,req.body.payload, returning);
-    !updatedEmpleado.name ? res.json(updatedEmpleado) : res.status(400).json(updatedEmpleado);
+    !updatedEmpleado.error ? res.json(updatedEmpleado) : res.status(400).json(updatedEmpleado);
   }else{
     res.status(404).json({msg:"empleado no existe"})
   }

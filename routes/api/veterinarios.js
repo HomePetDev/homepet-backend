@@ -25,7 +25,7 @@ router.patch('/:cedula' , async(req,res)=>{
   const veterinario = await query.select(tables.veterinarios, "*" , req.params);
   if ( veterinario ){
     const updatedVeterinario = await query.update(tables.veterinarios, req.params,req.body.payload, "*");
-    !updatedVeterinario.name ? res.json(updatedVeterinario) : res.status(400).json(updatedVeterinario);
+    !updatedVeterinario.error ? res.json(updatedVeterinario) : res.status(400).json(updatedVeterinario);
   }else{
     res.status(404).json({msg:"veterinario no existe"})
   }
