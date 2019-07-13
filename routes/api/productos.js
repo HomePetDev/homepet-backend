@@ -8,8 +8,8 @@ const uuid = require("uuid/v4");
 // Agrega un nuevo producto a un almacen de un homepet
 router.post('/:id_almacen', async(req, res) => {
   const id_producto = uuid().slice(0,8);
-  const { nombre_prod, descripcion, precio, instrucciones , nombre_especie, contenido , cantidad } = req.body.payload;
-  const newProducto = { id_producto, nombre_especie, nombre_prod , precio, descripcion, contenido, instrucciones};
+  const { nombre_prod, descripcion, precio, instrucciones , nombre_especie , cantidad } = req.body.payload;
+  const newProducto = { id_producto, nombre_especie, nombre_prod , precio, descripcion, instrucciones};
 
   // validacion de la capacidad del almacen y la cantidad de producto a insertar
   const spaceLeft = await getSpaceLeft(req.params.id_almacen);
@@ -22,7 +22,8 @@ router.post('/:id_almacen', async(req, res) => {
     res.status(400).json({error:"No se puede guardar el producto con dicha cantidad"})
     return  
   }
-    
+  
+  // Inserccion del producto
   const producto = await query.insert(tables.productos, newProducto, "*");
   if (producto.error) {
     res.status(400).json(producto) 
@@ -35,6 +36,7 @@ router.post('/:id_almacen', async(req, res) => {
     result.error ? res.status(400).json(result) : res.json({producto, result})
   }
 });
+
 
 // Selecciona todos los productos
 router.get('/', async (req, res) => {
@@ -55,10 +57,11 @@ router.get('/almacen/:id', async (req, res)=>{
 })
 
 
+
+
 // Actualiza la informacion de un producto
 router.patch('/:id_producto' , async(req,res)=>{
   const producto = await query.select(tables.productos, "*" , req.params);
-  
   
   if ( !producto.error ){
     const update = await query.update(tables.productos, req.params,req.body.payload, "*");
@@ -72,6 +75,21 @@ router.patch('/:id_producto' , async(req,res)=>{
 router.delete('/:id_producto', async (req, res)=>{
   res.json(await query.deleteT(tables.productos, req.params ))
 })
+
+/* PRODUCTO COMIDAS */
+
+// Agrega un producto tipo comida a un almacen
+router.post('/comida/add', async (req, res)=>{
+  const comida = await query.insert(tables.comidas, req.body.payload, "*");
+  comida.error ?  res.status(400).json(comida) : res.json(comida);
+})
+
+// Selecciona todas las comidas disponibles en nuestro almacen para una mascota  con su correspondiente especie y talla
+router.get('/comida/:id_mascota', async(req, res)=>{
+
+
+})
+
 
 
 module.exports = router;

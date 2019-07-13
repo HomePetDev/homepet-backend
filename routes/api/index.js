@@ -16,6 +16,7 @@ const razas = require('./razas');
 const veterinarios = require('./veterinarios');
 const almacenes = require('./almacenes');
 const productos = require('./productos');
+const fichas = require('./fichas');
 
 //  End points
 router.use('/homepets', homepets);
@@ -32,5 +33,6 @@ router.use('/razas', razas);
 router.use('/veterinarios', veterinarios);
 router.use('/almacenes', almacenes);
 router.use('/productos', productos);
+router.use('/fichas', fichas);
 
 module.exports = router;
