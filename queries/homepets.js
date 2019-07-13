@@ -23,8 +23,20 @@ async function selectAllEmpleados(rif){
   }
 }
 
+async function getHomePetByCedulaOwner(cedula){
+  const  {rows} = await db.raw(`
+    SELECT rif, capacidad, ciudad, sector, telefono, fecha_creacion, especializacion
+    FROM hmpet.gerentes AS g, hmpet.homepets AS h
+    WHERE(g.cedula='${cedula}' AND g.rif_homepet = h.rif)
+  `);
+    if (!Array.isArray(rows) || rows.length <= 0){
+      return {error:"Resultado no encontrado"}
+    }else{
+      return rows[0];
+    }
+}
 
 
 module.exports= {
-  findOwner, selectAllEmpleados
+  findOwner, selectAllEmpleados, getHomePetByCedulaOwner
 }
