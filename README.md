@@ -25,3 +25,24 @@ Modificar el archivo en `./db/index.js` de acuerdo a su configuracion de conexio
 })
 
 ```
+O crear una archivo `knexfile.js` con la siguiente configuraciones
+```sh
+
+module.exports = {
+
+  development: {
+    client: 'pg',
+    connection: {
+      host : 'localhost',
+      user : 'postgres',
+      password : 'flx',
+      database : 'postgres'
+    }
+  },
+  production: {
+    client: 'pg',
+    connection: process.env.DATABASE_URL
+  },
+};
+
+```
