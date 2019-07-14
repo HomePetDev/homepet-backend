@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const query = require ('../../queries');
-const { getHomePetByCedulaOwner} = require ('../../queries/homepets');
 
-const {selectAllEmpleados } = require('../../queries/homepets')
+const { selectAllEmpleados ,getHomePetByCedulaOwner } = require('../../queries/homepets')
 
 const tables = require('../../queries/tables');
 
@@ -104,6 +103,11 @@ router.get('/empleados/:rif', async(req, res)=>{
     res.json(empleados)
   }
 });
+
+router.get("/clientes/:rif", async(req,res)=>{
+  const clientes = await selectAllEmpleados
+
+})
 
 
 module.exports = router;

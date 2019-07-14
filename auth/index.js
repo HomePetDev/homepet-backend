@@ -12,7 +12,7 @@ router.post('/login' , async (req, res) => {
   if(!usuario.error){ 
     const match = await verifyHash (pass , usuario.pass);
     if (!match){
-      res.status(404).json({msg:"Contraseña o cedula no es correcta"});
+      res.status(400).json({error:"Contraseña o cedula no es correcta"});
     }else{          
       const token = await createJWT({cedula_id});
       res.status(200).json({token});

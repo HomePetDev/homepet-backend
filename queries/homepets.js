@@ -23,6 +23,8 @@ async function selectAllEmpleados(rif){
   }
 }
 
+
+
 async function getHomePetByCedulaOwner(cedula){
   const  {rows} = await db.raw(`
     SELECT rif, capacidad, ciudad, sector, telefono, fecha_creacion, especializacion

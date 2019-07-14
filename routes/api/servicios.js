@@ -32,8 +32,7 @@ router.patch('/:rif/:nombre' , async(req,res)=>{
 
 // Borra un servicio
 router.delete('/:rif/:nombre' , async(req,res)=>{
-
- 
+  res.json(await query.deleteT(tables.servicios, req.params)); 
 });
 
 
