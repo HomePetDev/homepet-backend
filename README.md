@@ -34,9 +34,9 @@ module.exports = {
     client: 'pg',
     connection: {
       host : 'localhost',
-      user : 'postgres',
-      password : 'flx',
-      database : 'postgres'
+      user : 'tu_usuarios',
+      password : 'tu_contraseña',
+      database : 'tu_basededatos'
     }
   },
   production: {
