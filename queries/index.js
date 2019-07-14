@@ -3,6 +3,8 @@ const {schema} = require('../queries/tables');
 
 async function insert(tableName, payload, columns){
   
+  !columns ? columns = "*" : "";
+
   try {
     const rows = await db(tableName).withSchema(schema).insert(payload, columns);
     return rows[0];
@@ -11,9 +13,11 @@ async function insert(tableName, payload, columns){
     return {error: error.detail}
   }
 
-  
 }
 async function update(tableName, keys , payload, columns){
+
+  !columns ? columns = "*" : "";
+
   try {
     const rows = await db(tableName).withSchema(schema).where(keys).update(payload,columns);
     if (!Array.isArray(rows) || rows.length <= 0){
@@ -27,7 +31,9 @@ async function update(tableName, keys , payload, columns){
   }
 }
 async function select(tableName, columns, keys){
-  
+
+  !columns ? columns = "*" : "";
+    
   let  rows
   try {
     !keys ?  rows = await db(tableName).withSchema(schema).select(columns) :

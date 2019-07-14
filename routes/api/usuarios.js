@@ -13,7 +13,7 @@ router.get('/', async (req, res)=> {
 
 router.get('/:cedula_id', async (req, res)=>{
   const usuario = await query.select(tables.usuarios, returning , req.params);
-  usuario ? res.json(usuario) : res.status(400).json(usuario);
+  !usuario.error ? res.json(usuario) : res.status(400).json(usuario);
 })
 
 

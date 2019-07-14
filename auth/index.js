@@ -5,25 +5,22 @@ const query = require('../queries');
 const tables = require('../queries/tables');
 
 router.post('/login' , async (req, res) => {
-    const {CI , pass } = req.body;
-    try {
-      let usuario = await usuariosQuery.findByCI(CI);
-      if(usuario){ 
-        const match = await verifyHash (pass , usuario.pass);
-        if (!match){
-          res.status(404).json({msg: 'Contraseña invalida'});
-        }else{          
-          const token = await createJWT({id:usuario.id});
-          res.status(200).json({token});
-        }
-      }else{
-        res.status(404).json({msg:'usuario no existe o no fue encontrado'})
-      }
-    } catch (error) {  
-      res.status(400).json(error);
+  
+  const { cedula_id, pass} = req.body.payload
+
+  let usuario = await query.select(tables.usuarios,"pass", {cedula_id}) 
+  if(!usuario.error){ 
+    const match = await verifyHash (pass , usuario.pass);
+    if (!match){
+      res.status(400).json({error:"Contraseña o cedula no es correcta"});
+    }else{          
+      const token = await createJWT({cedula_id});
+      res.status(200).json({token});
     }
-  }
-);
+  }else{
+    res.status(404).json(usuario)
+  }   
+});
 
 router.post('/signin', async (req, res) => {
   const {cedula_id , nombre , direccion , telefono, pass } = req.body.payload;

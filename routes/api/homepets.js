@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const query = require ('../../queries');
-const hmptQuery = require('../../queries/homepets')
+
+const { selectAllEmpleados ,getHomePetByCedulaOwner } = require('../../queries/homepets')
+
 const tables = require('../../queries/tables');
 
 const returningUsuario = ['cedula_id', 'nombre', 'direccion', 'telefono', 'fecha_reg', 'id_acceso'];
@@ -16,6 +18,13 @@ router.get('/:rif', async (req, res)=>{
   const homepet = await query.select(tables.homepets, "*" , req.params);
   !homepet.error ? res.json(homepet) : res.status(400).json(homepet);
 })
+
+// Obtiene un homepet con una cedula del gerente
+router.get('/owner/:cedula_id', async (req, res)=>{
+  const homepet = await getHomePetByCedulaOwner(req.params.cedula_id);
+  homepet.erro ? res.status(404).json(homepet) : res.json(homepet);
+})
+
 
 // Crea un homepet con la cedula de un usuario, convierte a ese usuario en gerente de ese homepet
 router.post('/new/:cedula_id', async (req, res)=>{
@@ -85,8 +94,20 @@ router.delete('/:rif' , async(req,res)=>{
 })
 
 
-// Extras 
+// Obtiene todos los empleados de un homepet
+router.get('/empleados/:rif', async(req, res)=>{
+  const empleados = await selectAllEmpleados(req.params.rif);
+  if (empleados.error){
+    res.status(400).json(empleados)
+  }else{
+    res.json(empleados)
+  }
+});
 
+router.get("/clientes/:rif", async(req,res)=>{
+  const clientes = await selectAllEmpleados
+
+})
 
 
 module.exports = router;
