@@ -24,7 +24,6 @@ async function selectAllEmpleados(rif){
 }
 
 
-
 async function getHomePetByCedulaOwner(cedula){
   const  {rows} = await db.raw(`
     SELECT rif, capacidad, ciudad, sector, telefono, fecha_creacion, especializacion
@@ -39,6 +38,21 @@ async function getHomePetByCedulaOwner(cedula){
 }
 
 
+async function getAllMascotas(rif){
+  const {rows} = await db.raw(`
+    SELECT nombre, fecha_nac, sexo, nombre_especie, nombre_raza
+    FROM hmpet.mascotas AS m, hmpet.homepets AS h, hmpet.historia AS hi
+    WHERE(hi.rif_homepet = ${rif} AND hi.id_mascota = m.id_mascota)
+  `);
+
+  if (!Array.isArray(rows) || rows.length <= 0){
+    return {error:"Resultado no encontrado"}
+  }else{
+    return rows;
+  }
+}
+
+
 module.exports= {
-  findOwner, selectAllEmpleados, getHomePetByCedulaOwner
+  findOwner, selectAllEmpleados, getHomePetByCedulaOwner, getAllMascotas
 }
